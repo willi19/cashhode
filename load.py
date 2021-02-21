@@ -1,6 +1,14 @@
 import os
 from typing import List, Tuple
 
+FILENAMES = [
+    'a.txt',
+    'b.txt',
+    'c.txt',
+    'd.txt',
+    'e.txt',
+]
+
 def load(filename: str) -> Tuple[int, int, int, List[str], int, List[List[str]]]:
     file = open(os.path.join('data', filename))
     num_photos = int(file.readline())
@@ -13,7 +21,7 @@ def load(filename: str) -> Tuple[int, int, int, List[str], int, List[List[str]]]
         parse = line.split(' ')
         orient = parse[0]
         num_tag = int(parse[1])
-        tags = parse[2:]
+        tags = [tag.rstrip() for tag in parse[2:]]
 
         if orient == 'V':
             num_V += 1
