@@ -53,8 +53,11 @@ def get_permutation(permute):
     return ret
         
 ans_max = [i for i in range(num_photos)]
+print(get_score(ans_max))
 it = 0
 while True:
+    if it%2 == 0:
+        print(get_score(ans_max))
     st = random.randint(0,max(0,num_photos-L+1))
     fin = st+L-1
     dist = get_dist_matrix(st,fin)
@@ -63,8 +66,6 @@ while True:
     new_ans = [ans_max[st+permutation[i]] for i in range(L)]
     for i in range(st,fin+1):
         ans_max[i] = new_ans[i-st]
-    if it%2 == 0:
-        print(get_score(ans_max))
     it+=1
     
     
