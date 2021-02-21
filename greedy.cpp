@@ -135,7 +135,7 @@ vvi greedy_select(vector<char> orient,  vector<vector<int>> tags){
     return results;
 }
 int main(){
-    pcvvi input = LOAD::load("data\\d.txt");
+    pcvvi input = LOAD::load("data\\e.txt");
     vector<char> orient = input.first;
     vvi tags = input.second;
     /*cout<<"tags\n";
@@ -151,7 +151,7 @@ int main(){
     cout<<"\n";
     cout<<"\n";*/
     vvi results = greedy_select(orient,  tags);
-    LOAD::save_results(results, "output\\d_greedy.txt");
+    LOAD::save_results(results, "output\\e_greedy.txt");
     cout<<"\n\n";
     /*
     for(auto A : results){
