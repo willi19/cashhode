@@ -27,4 +27,14 @@ def load(filename: str) -> Tuple[int, int, int, List[str], int, List[List[str]]]
         tags_list.append(tags)
         tag_set.update(tags)
 
-    return num_photos, num_V, num_H, orients, len(tag_set), tags_list
+    id = 0
+    tag_dict = {}
+    for tag in tag_set:
+        tag_dict[tag] = id
+        id += 1
+
+    tag_id_list = []
+    for tag_list in tags_list:
+        tag_id_list.append([tag_dict[tag] for tag in tag_list])
+        
+    return num_photos, num_V, num_H, orients, len(tag_set), tag_id_list
