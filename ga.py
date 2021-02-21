@@ -13,4 +13,12 @@ if __name__ == '__main__':
         num_photos, num_V, num_H, orients, num_tags, tags_id_list = load(filename)
         for i in range(num_population):
             vertical_pairs = rng.shuffle(np.arange(num_V)).reshape(-1, 2)
+            indices = rng.shuffle(np.arange(num_V // 2 + num_H))
+            slides = []
+            for indice in indices:
+                if indice < num_H:
+                    slides.append(set(tags_id_list[indice]))
+                else:
+                    vertical_pair = vertical_pairs[indice - num_H]
+                    slides.append(set(tags_id_list[vertical_pair[0]]).union(set(tags_id_list[vertical_pair[1]])))
             
