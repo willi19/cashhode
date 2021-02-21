@@ -2,7 +2,7 @@ import os
 from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, Manager, Lock
 
 from load import load
 from ga import get_interest
@@ -15,7 +15,7 @@ FILENAMES = [
     'e.txt',
 ]
 
-def get_nonzero_intersections(num_photos: int, tag_sets: List[set], index: int) -> int:
+def get_nonzero_intersections(num_photos: int, tag_sets: List[set], index: int, lock: Lock, filename: str) -> int:
     nonzero = 0
     processes = cpu_count()
     for i in range(num_photos):
@@ -23,11 +23,18 @@ def get_nonzero_intersections(num_photos: int, tag_sets: List[set], index: int) 
             interest = get_interest(tag_sets[i], tag_sets[j])
             if interest > 0:
                 nonzero += 1
+                lock.acquire()
+                try:
+                    with open(os.path.join('outputs', filename.split('.')[0] + '.txt'), 'a') as file:
+                        file.write(f'{i} {j}\n')
+                finally:
+                    lock.release()
     return nonzero
 
 if __name__ == '__main__':
     os.makedirs('figures', exist_ok=True)
-    for filename in FILENAMES:
+    os.makedirs('outputs', exist_ok=True)
+    for filename in FILENAMES[:3]:
         num_photos, num_V, num_H, orients, num_tags, tags_list = load(filename)
         print(f'{filename}: {num_photos} photos, {num_V} vertical, {num_H} horizontal, {num_tags} total tags')
         num_tags = [len(tags) for tags in tags_list]
@@ -45,8 +52,16 @@ if __name__ == '__main__':
         tag_sets = [set(tag_list) for tag_list in tags_list]
 
         with Pool(processes=cpu_count()) as pool:
-            processes = [pool.apply_async(get_nonzero_intersections, (num_photos, tag_sets, i)) for i in range(cpu_count())]
+            manager = Manager()
+            lock = manager.Lock()
+            processes = [pool.apply_async(get_nonzero_intersections, (num_photos, tag_sets, i, lock, filename)) for i in range(cpu_count())]
+            # nonzeros = [process.get() for process in processes]
+            # nonzero = sum(non[0] for non in nonzeros)
+            # pairings = sum([non[1] for non in nonzeros], [])
             nonzero = sum(process.get() for process in processes)
+        # with open(os.path.join('outputs', filename.split('.')[0] + '.txt'), 'w') as file:
+        #     for pair in pairings:
+        #         file.write(f'{pair[0]} {pair[1]}\n')
         print(f'Nonzero interest: {nonzero} out of {num_photos * (num_photos - 1) // 2}')
         # for _ in range(100000):
         #     indices = rng.choice(num_photos, size=2, replace=False)
