@@ -10,7 +10,7 @@ def calc_interest_score(A: List[int], B: List[int]):
     return [ len(p - q), len(p & q), len(q - p) ]
 
 def check(infname: str, oufname: str, submission: List[List[int]]):
-    n, nv, nh, ori, nt, tags = load(infname)
+    n, nh, nv, ori, nt, tags = load(infname)
     assert 1 <= len(submission) and len(submission) <= n
     shown_idx = set()
     sub_tag_list = []
