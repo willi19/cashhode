@@ -34,12 +34,12 @@ def check(infname: str, oufname: str, submission: List[List[int]]):
 
     bottleneck_count = [0] * 3
     score = 0
-    print(sub_tag_list)
+    #print(sub_tag_list)
     for i, v in enumerate(sub_tag_list[:len(sub_tag_list) - 1]):
         w = sub_tag_list[i + 1]
         its = calc_interest_score(v, w)
         mi = min(list(range(3)), key=lambda i : its[i])
-        print(its)
+        #print(its)
         score += its[mi]
         bottleneck_count[mi] += 1
     
@@ -51,6 +51,14 @@ def check(infname: str, oufname: str, submission: List[List[int]]):
 def get_name(fname):
     return fname + str(time()) + '.out'
 
+def load_submissions(fname:str):
+    path = os.path.join('output', fname)
+    submissions = []
+    with open(path, 'r') as f:
+        lines = f.readlines()
+        for x in lines[1:]:
+            submissions.append( list(map(int, x.split())) )
+    return submissions
 def dump(fname:str, submission:List[List[int]]):
     fname = get_name(fname)
     path = os.path.join('output', fname)
@@ -62,4 +70,4 @@ def dump(fname:str, submission:List[List[int]]):
 if __name__ == '__main__':
     check('a.txt', 'a_sample', [[0], [3], [1, 2]])
     check('a.txt', 'a_sample2', [[0], [1,2], [3]])
-    check('a.txt', 'a_sample3', [[0, 3], [1, 2]])
+    print(load_submissions('c_test.out'))
