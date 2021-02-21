@@ -95,7 +95,7 @@ vvi greedy_select(vector<char> orient,  vector<vector<int>> tags){
         for(int j=0 ; j<tags_in_Slides.size() ; j++){
             if(ck[j]) continue;
             it++;
-            if(it>100)break;
+            if(it>500)break;
             int score = interest_score(tags_in_Slides[i], tags_in_Slides[j]);
             //cout<<"i, j, score = "<<i<<" "<<j<<" "<<score<<"\n";
             if(score > max_score){
@@ -135,7 +135,7 @@ vvi greedy_select(vector<char> orient,  vector<vector<int>> tags){
     return results;
 }
 int main(){
-    pcvvi input = LOAD::load("data\\b.txt");
+    pcvvi input = LOAD::load("data\\d.txt");
     vector<char> orient = input.first;
     vvi tags = input.second;
     /*cout<<"tags\n";
@@ -151,7 +151,7 @@ int main(){
     cout<<"\n";
     cout<<"\n";*/
     vvi results = greedy_select(orient,  tags);
-    LOAD::save_results(results, "output\\b_greedy.txt");
+    LOAD::save_results(results, "output\\d_greedy.txt");
     cout<<"\n\n";
     /*
     for(auto A : results){

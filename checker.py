@@ -9,7 +9,7 @@ def calc_interest_score(A: List[int], B: List[int]):
     p, q = set(A), set(B)
     return [ len(p - q), len(p & q), len(q - p) ]
 
-def check(infname: str, oufname: str, submission: List[List[int]]):
+def check(infname: str, oufname: str, submission: List[List[int]], use_dump = True):
     n, nh, nv, ori, nt, tags = load(infname)
     assert 1 <= len(submission) and len(submission) <= n
     shown_idx = set()
@@ -46,7 +46,8 @@ def check(infname: str, oufname: str, submission: List[List[int]]):
     #dump phase
     print('score = ', score)
     print(f'Bottleneck occurrence: L-R: {bottleneck_count[0]}, L&R: {bottleneck_count[1]}, R-L: {bottleneck_count[2]}')
-    dump(oufname, submission)
+    if use_dump:
+        dump(oufname, submission)
 
 def get_name(fname):
     return fname + str(time()) + '.out'
@@ -67,7 +68,11 @@ def dump(fname:str, submission:List[List[int]]):
         for L in submission:
             f.write(' '.join([str(x) for x in L]) + '\n')
 
+def evaluate(infname:str, oufname:str):
+    submission = load_submissions(oufname)
+    check(infname, '', submission, use_dump=False)
 if __name__ == '__main__':
-    check('a.txt', 'a_sample', [[0], [3], [1, 2]])
-    check('a.txt', 'a_sample2', [[0], [1,2], [3]])
-    print(load_submissions('c_test.out'))
+    # check('a.txt', 'a_sample', [[0], [3], [1, 2]])
+    # check('a.txt', 'a_sample2', [[0], [1,2], [3]])
+    # print(load_submissions('c_test.out'))
+    evaluate('c.txt', 'c_greedy.txt')
