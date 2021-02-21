@@ -13,3 +13,4 @@ if __name__ == '__main__':
         num_photos, num_V, num_H, orients, num_tags, tags_id_list = load(filename)
         for i in range(num_population):
             vertical_pairs = rng.shuffle(np.arange(num_V)).reshape(-1, 2)
+            

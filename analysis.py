@@ -1,6 +1,8 @@
 import os
+from typing import List
 import numpy as np
 from matplotlib import pyplot as plt
+from multiprocessing import Pool, cpu_count
 
 from load import load
 from ga import get_interest
@@ -12,6 +14,16 @@ FILENAMES = [
     'd.txt',
     'e.txt',
 ]
+
+def get_nonzero_intersections(num_photos: int, tag_sets: List[set], index: int) -> int:
+    nonzero = 0
+    processes = cpu_count()
+    for i in range(num_photos):
+        for j in range(i + 1 + index, num_photos, processes):
+            interest = get_interest(tag_sets[i], tag_sets[j])
+            if interest > 0:
+                nonzero += 1
+    return nonzero
 
 if __name__ == '__main__':
     os.makedirs('figures', exist_ok=True)
@@ -31,11 +43,10 @@ if __name__ == '__main__':
         # interests = []
         nonzero = 0
         tag_sets = [set(tag_list) for tag_list in tags_list]
-        for i in range(num_photos):
-            for j in range(i + 1, num_photos):
-                interest = get_interest(tag_sets[i], tag_sets[j])
-                if interest > 0:
-                    nonzero += 1
+
+        with Pool(processes=cpu_count()) as pool:
+            processes = [pool.apply_async(get_nonzero_intersections, (num_photos, tag_sets, i)) for i in range(cpu_count())]
+            nonzero = sum(process.get() for process in processes)
         print(f'Nonzero interest: {nonzero} out of {num_photos * (num_photos - 1) // 2}')
         # for _ in range(100000):
         #     indices = rng.choice(num_photos, size=2, replace=False)
