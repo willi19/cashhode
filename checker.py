@@ -75,4 +75,4 @@ if __name__ == '__main__':
     # check('a.txt', 'a_sample', [[0], [3], [1, 2]])
     # check('a.txt', 'a_sample2', [[0], [1,2], [3]])
     # print(load_submissions('c_test.out'))
-    evaluate('c.txt', 'c_greedy.txt')
+    evaluate('e.txt', 'e_greedy.txt')

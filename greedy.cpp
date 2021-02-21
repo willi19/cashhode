@@ -95,7 +95,7 @@ vvi greedy_select(vector<char> orient,  vector<vector<int>> tags){
         for(int j=0 ; j<tags_in_Slides.size() ; j++){
             if(ck[j]) continue;
             it++;
-            if(it>500)break;
+            if(it>100)break;
             int score = interest_score(tags_in_Slides[i], tags_in_Slides[j]);
             //cout<<"i, j, score = "<<i<<" "<<j<<" "<<score<<"\n";
             if(score > max_score){
